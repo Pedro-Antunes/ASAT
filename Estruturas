@@ -1,0 +1,29 @@
+Valoração
+	Bitset/Array de bools
+
+	Valoracao()
+	flip(i)
+	set(i, v)
+	get(i)
+
+Fórmula
+	Expressão
+
+	?Formula()
+	evaluate(valoração) (coeficiente de adaptação)
+	parse(file)
+
+Indivíduo
+	Id
+	Valoração
+	Mem Array de Valorações
+	Actv Bitset/Array de bools
+	PrMut Float
+
+	Individuo(id)
+
+População
+	Array de Indivíduos
+	Populacao(n)
+
+	
