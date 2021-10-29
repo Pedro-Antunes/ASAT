@@ -6,13 +6,13 @@ class Populacao:
         for i in range(N_Individuo):
             self.add()
 
-    def add(ind):
+    def add(self, ind):
         self.elem.append(h)
         h += 1
 
-    def remove(ind):
+    def remove(self, ind):
         return
 
-    def access(i):
+    def access(self, i):
         return elem[i]
 
