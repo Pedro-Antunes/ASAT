@@ -13,7 +13,7 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
     formula = Formula(path)
     bestValoracao = Valoracao()
     bestCoef = 0
-    N = formula.varCount
+    N = formula.getVarCount()
     
     agenda = CAP()
     for i in range(In):
@@ -24,19 +24,19 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
     currentEvent = Evento("reg", 0, None)
     # Verificar se vale a pena meter current_kind e current_id.
     
-    while(currentTime < TFim and bestCoef < 1 - eps):
+    while(currentTime < TFim and bestCoef[0] < ):
         
         if currentEvent.kind == "mut":
-            individuo = populacao.getIndividuo(currentEvent.id)
-            newValoracao = individuo.valoracao
+            individuo = populacao.getIndividuo(currentEvent.getId())
+            newValoracao = individuo.getValoracao()
             for i in range(N):
-                if individuo.actv.get(i) and random() < individuo.PrMut:
+                if individuo.actv.get(i) and random() < individuo.getPrMut():
                     newValoracao.flip(i)
             newCoef = formula.evaluate(newValoracao)
-            if newCoef >= individuo.coef:
-                individuo.mem.append(individuo.valoracao)
-                individuo.valoracao = newValoracao
-                individuo.coef = newCoef
+            if newCoef >= individuo.getCoef():
+                individuo.memorize(individuo.getValoracao())
+                individuo.setValoracao(newValoracao)
+                individuo.setCoef(newCoef)
                 if newCoef > bestCoef:
                     bestValoracao = newValoracao
                     bestCoef = newCoef
@@ -44,17 +44,17 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
         
         elif currentEvent.kind == "melh":
 
-            individuo = populacao.getIndividuo(currentEvent.id)
-            newValoracao = individuo.valoracao
+            individuo = populacao.getIndividuo(currentEvent.getId())
+            newValoracao = individuo.getValoracao()
             for i in numpy.random.permutation(N):
                 if individuo.actv.get(i):
                     newValoracao.flip(i)
-                    if formula.evaluate(newValoracao) < individuo.coef:
+                    if formula.evaluate(newValoracao) < individuo.getCoef():
                         newValoracao.flip(i)
             newCoef = formula.evaluate(newValoracao)
-            individuo.mem.append(individuo.valoracao)
-            individuo.valoracao = newValoracao
-            individuo.coef = newCoef
+            individuo.memorize(individuo.getValoracao())
+            individuo.setValoracao(newValoracao)
+            individuo.setCoef(newCoef)
             if newCoef > bestCoef:
                 bestValoracao = newValoracao
                 bestCoef = newCoef
@@ -62,19 +62,12 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
         
         elif currentEvent.kind == "reg":
 
-            for i in range(In):
-                individuo = populacao.getIndividuo(i)
-                if len(individuo.mem) >= 10:
-                    if individuo.N_unique_val() < 3:
-                        continue
-                    else:
-                        individuo.mem = []
-
+ 
 
 
 
         currentEvent = agenda.top()
-        currentTime = currentEvent.time
+        currentTime = currentEvent.getTime()
 
     return 
         
