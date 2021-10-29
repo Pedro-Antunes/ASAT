@@ -1,11 +1,23 @@
 class Individuo:
 
-    def __init__(self, id):
-        self.id = id
-        self.val = Valoracao()
-        self.mem = []
-        self.actv = Valoracao()
-        self.PrMut = 0.5
+    def __init__(self, identifier):
+        self._id = identifier
+        self._val = Valoracao()
+        self._mem = []
+        self._actv = Valoracao()
+        self._PrMut = 0.5
 
-    def N_unique_val(self):
+    def getId(self):
+        return self._id
+    
+    def getVal(self):
+        return self._val
+
+    def getPrMut(self):
+        return self._PrMut
+
+    def memorise(self, x):
+        self._mem.append(x)
+
+    def uniqueValCount(self):
         return len(set(self.mem))
