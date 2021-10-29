@@ -66,11 +66,15 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
             for individuo in populacao.getAll():
                 if individuo.valCount() >= 10:
                     if individuo.uniqueValCount() < 3:
-                        populacao.colonize(individuo.getId())
+                        individuo = populacao.colonize(individuo.getId())
                     else:
                         individuo.lock()
                         individuo.forget()
                         individuo.setPrMut(individuo.getActvCount() / (2 * N))
+                newCoef = individuo.getCoef()
+                if newCoef > bestCoef:
+                    bestValoracao = individuo.getValoracao()
+                    bestCoef = newCoef
             agenda.add(Evento("reg", currentTime + expRandom(TReg), None))
 
         agenda.remove()
