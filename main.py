@@ -17,20 +17,20 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
     
     agenda = CAP()
     for i in range(In):
-        agenda.push(Evento("mut", 0, i))
-        agenda.push(Evento("melh", 0, i))
+        agenda.add(Evento("mut", 0, i))
+        agenda.add(Evento("melh", 0, i))
     
     currentTime = 0
     currentEvent = Evento("reg", 0, None)
     # Verificar se vale a pena meter current_kind e current_id.
     
-    while(currentTime < TFim and bestCoef[0] < ):
+    while(currentTime < TFim and bestCoef[0] < bestCoef[1]):
         
         if currentEvent.kind == "mut":
             individuo = populacao.getIndividuo(currentEvent.getId())
             newValoracao = individuo.getValoracao()
             for i in range(N):
-                if individuo.actv.get(i) and random() < individuo.getPrMut():
+                if individuo.getActv().get(i) and random() < individuo.getPrMut():
                     newValoracao.flip(i)
             newCoef = formula.evaluate(newValoracao)
             if newCoef >= individuo.getCoef():
@@ -47,7 +47,7 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
             individuo = populacao.getIndividuo(currentEvent.getId())
             newValoracao = individuo.getValoracao()
             for i in numpy.random.permutation(N):
-                if individuo.actv.get(i):
+                if individuo.getActv().get(i):
                     newValoracao.flip(i)
                     if formula.evaluate(newValoracao) < individuo.getCoef():
                         newValoracao.flip(i)
@@ -58,11 +58,11 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
             if newCoef > bestCoef:
                 bestValoracao = newValoracao
                 bestCoef = newCoef
-            agenda.push(Evento("melh", currentTime + expRandom(TMelh), individuo.id))
+            agenda.add(Evento("melh", currentTime + expRandom(TMelh), individuo.getId()))
         
         elif currentEvent.kind == "reg":
 
- 
+            
 
 
 
