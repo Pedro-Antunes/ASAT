@@ -16,6 +16,9 @@ class Heap:
         self.siftDown(1)
         return top
 
+    def top(self):
+        return self.tree[1]
+
     def replace(self, object):
         top = self.tree[1]
         self.tree[1] = object
