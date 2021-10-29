@@ -38,8 +38,8 @@ Formula
 	varCount?N_var <int>
 	size <int>
 	clauses?form <list(list(int))>
-	-> parse(file)
 	-> evaluate(Valoracao) # Retorna o Coeficiente de Adaptação
+	-> getVarCount()
 
 Simulador
 	populacao; agenda;
