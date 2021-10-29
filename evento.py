@@ -1,3 +1,4 @@
+# DONE
 class Evento:
 
     def __init__(self, kind, time, target):
