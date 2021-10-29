@@ -1,29 +1,57 @@
-Valoração
-	Bitset/Array de bools
+Bitset
+	data <int>
+	-> set(i)
+	-> reset(i)
+	-> flip(i)
+	-> get(i)
 
-	Valoracao()
-	flip(i)
-	set(i, v)
-	get(i)
+Valoração = <Bitset>
 
-Fórmula
-	Expressão
+Individuo
+	id <int>
+	val <Valoracao> 
+	mem <list(Valoracao)>
+	actv <Valoracao>
+	PrMut <float>
+	-> unique() # Retorna o número de Valorações únicas
 
-	?Formula()
-	evaluate(valoração) (coeficiente de adaptação)
-	parse(file)
+Populacao
+	elem <list(Individuo)>
+	-> getIndividuo?access(i)
 
-Indivíduo
-	Id
-	Valoração
-	Mem Array de Valorações
-	Actv Bitset/Array de bools
-	PrMut Float
+Evento
+	kind <string>
+	time <float>
+	target <Pop>
+	-> getKind()
+	-> getTime)
+	-> getTarget()
 
-	Individuo(id)
+CAP
+	sch <Heap>
+	-> next()
+	-> add
+	-> replace(e)
+	...
 
-População
-	Array de Indivíduos
-	Populacao(n)
+Formula
+	varCount?N_var <int>
+	size <int>
+	clauses?form <list(list(int))>
+	-> parse(file)
+	-> evaluate(Valoracao) # Retorna o Coeficiente de Adaptação
 
-	
+Simulador
+	populacao; agenda;
+	eventoAtual, 
+	...
+
+Comentários
+ - O Evento é um terno (label, due, target) e podemos passar o próprio indivíduo como parâmetro target=Individuo() - é melhor não.
+ - Usar N_<lorem> para número de elementos (ie. N_var para número de variáveis).
+ - Não percebo a utilizade do identificador dos indivíduos. Assim, não podemos iterar a populacao por index e vamos ter que procurar cada indivíduo um a um - O(N).
+ ^ O identificar de um indivíduo NÃO é a sua posição na população.
+ - Definir um método do bitset que conte o número de bits ativos.
+ - **Talvez** vale a pena implementar binary search na população - Nope.
+ - Refazer as classes, não aceder aos atributos diretamente, usar métodos
+ - Notação: _<atributo> para nomes de atributos  

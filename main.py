@@ -65,12 +65,11 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
             for i in range(In):
                 individuo = populacao.getIndividuo(i)
                 if len(individuo.mem) >= 10:
-                    setValr = set()
-                    for valr in individuo.mem:
-                        setValr.add(valr)
-                    if len(setValr) < 3:
-
+                    if individuo.N_unique_val() < 3:
+                        continue
                     else:
+                        individuo.mem = []
+
 
 
 
