@@ -1,4 +1,4 @@
-from random import random
+from random
 
 import numpy
 
@@ -19,9 +19,10 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
     for i in range(In):
         agenda.add(Evento("mut", 0, i))
         agenda.add(Evento("melh", 0, i))
-    
-    currentTime = 0
-    currentEvent = Evento("reg", 0, None)
+    agenda.add(Evento("reg", 0, None))
+
+    currentEvent = agenda.next()
+    currentTime = currentEvent.getTime()
     # Verificar se vale a pena meter current_kind e current_id.
     
     while(currentTime < TFim and bestCoef[0] < bestCoef[1]):
@@ -40,7 +41,7 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
                 if newCoef > bestCoef:
                     bestValoracao = newValoracao
                     bestCoef = newCoef
-            agenda.push(Evento("mut", currentTime + expRandom(TMut), individuo.id))
+            agenda.add(Evento("mut", currentTime + expRandom(TMut), individuo.id))
         
         elif currentEvent.kind == "melh":
 
@@ -62,11 +63,18 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
         
         elif currentEvent.kind == "reg":
 
-            
+            for individuo in populacao.getAll():
+                if individuo.valCount() >= 10:
+                    if individuo.uniqueValCount() < 3:
+                        populacao.colonize(individuo.getId())
+                    else:
+                        individuo.lock()
+                        individuo.forget()
+                        individuo.setPrMut(individuo.getActvCount() / (2 * N))
+            agenda.add(Evento("reg", currentTime + expRandom(TReg), None))
 
-
-
-        currentEvent = agenda.top()
+        agenda.remove()
+        currentEvent = agenda.next()
         currentTime = currentEvent.getTime()
 
     return 
