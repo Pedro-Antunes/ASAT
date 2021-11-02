@@ -14,7 +14,9 @@ class Bitset:
         self.data ^= 1<<i
         
     def get(self, i):
-        return bool(self.data & 1<<i)
+        # TA A DAR BUG AQUI PLS HELP
+        print(type(self.data), type(1 << i))
+        return bool(self.data & (1 << i))
 
     def count(self):
         pass

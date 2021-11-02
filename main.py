@@ -1,24 +1,27 @@
+from math import log
 from random import random
 
 import numpy
 
-eps = 1e-08
+from cap import CAP
+from evento import Evento
+from formula import Formula
+from populacao import Populacao
+
 
 def expRandom(m):
     return -m*log(random())   
+
 
 def simulador(TFim, TReg, TMelh, TMut, In, path):
     
     populacao = Populacao(In)
     formula = Formula(path)
     N = formula.getVarCount()
-
-    bestValoracao = Valoracao()
-    bestCoef = (0, N)
     
     agenda = CAP()
     for individuo in populacao.getAll():
-        individuo.setCoef(formula.evaluate(individuo.getValoracao))
+        individuo.setCoef(formula.evaluate(individuo.getValoracao()))
         agenda.add(Evento("mut", 0, individuo.getId()))
         agenda.add(Evento("melh", 0, individuo.getId()))
     agenda.add(Evento("reg", 0, None))
@@ -26,10 +29,10 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
     currentEvent = agenda.next()
     currentTime = currentEvent.getTime()
     
-    while(currentTime < TFim and bestCoef[0] < bestCoef[1]):
+    while currentTime < TFim:
         
-        if currentEvent.kind == "mut":
-            individuo = populacao.getIndividuo(currentEvent.getId())
+        if currentEvent.getKind() == "mut":
+            individuo = populacao.getIndividuo(currentEvent.getTarget())
             newValoracao = individuo.getValoracao()
             for i in range(N):
                 if not individuo.isLocked(i) and random() < individuo.getPrMut():
@@ -40,15 +43,12 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
                 individuo.memorize(individuo.getValoracao())
                 individuo.setValoracao(newValoracao)
                 individuo.setCoef(newCoef)
-                ##Problema com os coeficientes não inicializados
-                if newCoef > bestCoef:
-                    bestValoracao = newValoracao
-                    bestCoef = newCoef
+
             agenda.add(Evento("mut", currentTime + expRandom(TMut), individuo.getId()))
         
-        elif currentEvent.kind == "melh":
+        elif currentEvent.getKind() == "melh":
 
-            individuo = populacao.getIndividuo(currentEvent.getId())
+            individuo = populacao.getIndividuo(currentEvent.getTarget())
             newValoracao = individuo.getValoracao()
             for i in numpy.random.permutation(N):
                 if not individuo.isLocked(i):
@@ -59,12 +59,10 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
             individuo.memorize(individuo.getValoracao())
             individuo.setValoracao(newValoracao)
             individuo.setCoef(newCoef)
-            if newCoef > bestCoef:
-                bestValoracao = newValoracao
-                bestCoef = newCoef
+
             agenda.add(Evento("melh", currentTime + expRandom(TMelh), individuo.getId()))
         
-        elif currentEvent.kind == "reg":
+        elif currentEvent.getKind() == "reg":
 
             for individuo in populacao.getAll():
                 if individuo.valCount() >= 10:
@@ -76,10 +74,7 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
                         individuo.lock()
                         individuo.forget()
                         individuo.setPrMut(individuo.getActvCount() / (2 * N))
-                    newCoef = individuo.getCoef()
-                    if newCoef > bestCoef:
-                        bestValoracao = individuo.getValoracao()
-                        bestCoef = newCoef
+
             agenda.add(Evento("reg", currentTime + expRandom(TReg), None))
 
         agenda.remove()
@@ -87,7 +82,5 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
         currentTime = currentEvent.getTime()
 
     return 
-        
-        
-        
-    
+
+simulador(1000, 1, 1, 1, 100, "uf250-01.cnf")

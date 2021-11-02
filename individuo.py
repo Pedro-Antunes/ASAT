@@ -1,19 +1,24 @@
+from bitset import Bitset
+from valoracao import Valoracao
+
+
 class Individuo:
 
     def __init__(self, id):
         self._id = id
         self._val = Valoracao()
         self._mem = []
-        self._actv = Valoracao()
+        self._actv = Bitset()
         self._PrMut = 0.5
+        self._coef = None
 
-    def setVal(self, val):
+    def setValoracao(self, val):
         self._val = val
 
     def getId(self):
         return self._id
     
-    def getVal(self):
+    def getValoracao(self):
         return self._val
 
     def getPrMut(self):
@@ -27,3 +32,12 @@ class Individuo:
 
     def uniqueValCount(self):
         pass
+
+    def isLocked(self, bit):
+        return self._actv.get(bit)
+
+    def setCoef(self, coef):
+        self._coef = coef
+
+    def getCoef(self):
+        return self._coef
