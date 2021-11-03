@@ -1,7 +1,4 @@
 # DONE
-from valoracao import Valoracao
-
-
 class Formula:
 
     def __init__(self, path):
