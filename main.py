@@ -15,13 +15,24 @@ def expRandom(m):
 
 def simulador(TFim, TReg, TMelh, TMut, In, path):
     
-    populacao = Populacao(In)
     formula = Formula(path)
     N = formula.getVarCount()
     
-    agenda = CAP()
+    # Verificar se não estamos a atrofiar camadas
+    populacao = Populacao()
+    for _ in range(In):
+        firstValoracao = Valoracao()
+        for i in range(N):
+            if random() < 0.5:
+                firstValoracao.flip(i)
+        populacao.create(firstValoracao)
+    
     for individuo in populacao.getAll():
         individuo.setCoef(formula.evaluate(individuo.getValoracao()))
+
+    agenda = CAP()
+    for individuo in populacao.getAll():
+        
         agenda.add(Evento("mut", 0, individuo.getId()))
         agenda.add(Evento("melh", 0, individuo.getId()))
     agenda.add(Evento("reg", 0, None))
@@ -37,7 +48,6 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
             for i in range(N):
                 if not individuo.isLocked(i) and random() < individuo.getPrMut():
                     newValoracao.flip(i)
-                    #O Antunes não gosta
             newCoef = formula.evaluate(newValoracao)
             if newCoef >= individuo.getCoef():
                 individuo.memorize(individuo.getValoracao())
@@ -67,9 +77,16 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
             for individuo in populacao.getAll():
                 if individuo.valCount() >= 10:
                     if individuo.uniqueValCount() < 3:
-                        individuo = populacao.colonize(individuo.getId())
-                        #Maybe
-                        individuo.setCoef(formula.evaluate(individuo.getValoracao))
+                        # Rever isto <--
+                        colonizer =  populacao.getRandomOther(individuo.getId())
+                        newValoracao = colonizer.getValoracao()
+                        for i in numpy.random.permutation(N):
+                            newValoracao.flip(i)
+                            if formula.evaluate(newValoracao) < colonizer.getCoef():
+                                newValoracao.flip(i)
+                        newIndividuo = Individuo(id, newValoracao)
+                        newIndividuo.setCoef(formula.evaluate(newValoracao))
+                        populacao.colonize(id, newIndividuo)
                     else:
                         individuo.lock()
                         individuo.forget()
@@ -81,6 +98,6 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
         currentEvent = agenda.next()
         currentTime = currentEvent.getTime()
 
-    return 
+    return ...
 
 simulador(1000, 1, 1, 1, 100, "uf250-01.cnf")

@@ -15,3 +15,8 @@ class CAP:
 
     def remove(self):
         self._eventHeap.pop()
+
+'''
+    def show(self):
+        self._eventHeap.show()
+'''

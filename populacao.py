@@ -1,23 +1,26 @@
-from individuo import Individuo
+import random
 
 
 class Populacao:
 
-    def __init__(self, N_Individuo):
+    def __init__(self):
         self._elem = []
-        self._h = 0
-        for i in range(N_Individuo):
-            self.add(Individuo(i))
 
-    def add(self, ind):
-        self._elem.append(ind)
-        self._h += 1
+    def create(self, val):
+        self._elem.append(Individuo(len(self._elem), val))
 
-    def remove(self, ind):
-        return
-
-    def getIndividuo(self, i):
-        return self._elem[i]
+    def colonize(self, id, individuo):
+        self._elem[id] = individuo
+        
+    def getIndividuo(self, id):
+        return self._elem[id]
 
     def getAll(self):
         return self._elem
+
+    def getRandomOther(self, id):
+        r = random.randint(0, len(self._elem)-2)
+        if r >= id:
+            r += 1
+        return self._elem[r]
+        

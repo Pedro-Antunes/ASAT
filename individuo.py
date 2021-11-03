@@ -4,10 +4,9 @@ from valoracao import Valoracao
 
 class Individuo:
 
-    def __init__(self, id):
+    def __init__(self, id, val):
         self._id = id
-        self._val = Valoracao()
-        self._coef = 0
+        self._val = val
         self._mem = []
         self._actv = Bitset()
         self._PrMut = 0.5
