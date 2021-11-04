@@ -47,6 +47,9 @@ class Individuo:
     def isLocked(self, bit):
         return self._actv.test(bit)
 
+    def getActvCount(self):
+        return self._actv.count()
+
     def lockBits(self, N):
         for i in range(N):
             if not self._actv.test(i):
