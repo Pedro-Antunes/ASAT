@@ -21,11 +21,14 @@ class Formula:
     def getVarCount(self):
         return self._varCount
 
+    def getClauseCount(self):
+        return len(self._clauses)
+
     def evaluate(self, valoracao):
         satisfy = 0
         for cl in self._clauses:
             i = 0
-            while i < len(cl) and (valoracao.get(abs(cl[i]) - 1) != (cl[i] > 0)):
+            while i < len(cl) and (valoracao.test(abs(cl[i]) - 1) != (cl[i] > 0)):
                 i += 1
             if i < len(cl):
                 satisfy += 1
