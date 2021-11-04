@@ -12,7 +12,7 @@ from valoracao import Valoracao
 
 
 def expRandom(m):
-    return -m*log(random())   
+    return -m*log(random())
 
 
 def simulador(TFim, TReg, TMelh, TMut, In, path):
