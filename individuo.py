@@ -47,12 +47,15 @@ class Individuo:
     def isLocked(self, bit):
         return self._actv.test(bit)
 
+    def getActvCount(self):
+        return self._actv.count()
+
     def lockBits(self, N):
         for i in range(N):
             if not self._actv.test(i):
                 j = 1
-                state = self._mem[0].test(j)
-                while j < len(self._mem) and self._mem[j].test(j) == state:
+                state = self._mem[0].test(i)
+                while j < len(self._mem) and self._mem[j].test(i) == state:
                     j += 1
                 if j >= len(self._mem):
                     self._actv.set(i)
