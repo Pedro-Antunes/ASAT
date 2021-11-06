@@ -1,4 +1,4 @@
-from bitset import Bitset
+from valoracao import Valoracao
 
 
 class Individuo:
@@ -8,12 +8,11 @@ class Individuo:
         self._val = val
         self._eval = None
         self._mem = []
-        self._actv = Bitset()
+        self._actv = Valoracao(val.getSize())
         self._PrMut = 0.5
 
     def getId(self):
         return self._id
-
 
     def getValoracao(self):
         return self._val
@@ -21,13 +20,14 @@ class Individuo:
     def setValoracao(self, val):
         self._val = val
 
-
     def setEval(self, eval):
         self._eval = eval
 
     def getEval(self):
         return self._eval
 
+    def getActvCount(self):
+        return self._actv.count()
 
     def memorize(self, x):
         self._mem.append(x)
@@ -41,7 +41,7 @@ class Individuo:
     def uniqueValCount(self):
         valSet = set()
         for val in self._mem:
-            valSet.add(val.asInt())
+            valSet.add(val.display())
         return len(valSet)
 
     def isLocked(self, bit):

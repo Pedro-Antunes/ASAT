@@ -20,6 +20,7 @@ class Populacao:
     def getAll(self):
         return self._elem
 
+    #Verificar bounds do range
     def getRandomOther(self, id):
         r = random.randint(0, len(self._elem)-2)
         if r >= id:

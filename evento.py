@@ -1,4 +1,3 @@
-# DONE
 class Evento:
 
     def __init__(self, kind, time, target):
@@ -14,6 +13,3 @@ class Evento:
 
     def getTarget(self):
         return self._target
-
-    def __str__(self):
-        return f"{self._kind} {self._time} {self._target}"

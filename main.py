@@ -4,7 +4,7 @@ from random import random
 import numpy
 
 from cap import CAP
-from evento import Evento
+from evento_alt import Evento
 from formula import Formula
 from individuo import Individuo
 from populacao import Populacao
@@ -21,10 +21,9 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
     N = formula.getVarCount()
     C = formula.getClauseCount()
     
-    # Verificar se não estamos a atrofiar camadas
     populacao = Populacao()
     for _ in range(In):
-        firstValoracao = Valoracao()
+        firstValoracao = Valoracao(N)
         for i in range(N):
             if random() < 0.5:
                 firstValoracao.flip(i)
@@ -35,22 +34,24 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
 
     agenda = CAP()
     for individuo in populacao.getAll():
-        
-        agenda.add(Evento("mut", 0, individuo.getId()))
-        agenda.add(Evento("melh", 0, individuo.getId()))
-    agenda.add(Evento("reg", 0, None))
+        agenda.add(Evento("mut", expRandom(TMut), individuo.getId()))
+        agenda.add(Evento("melh", expRandom(TMelh), individuo.getId()))
+    agenda.add(Evento("reg", expRandom(TReg), None))
 
     currentEvent = agenda.next()
     currentTime = currentEvent.getTime()
 
     foundSolution = None
     
+    
     while currentTime < TFim and not foundSolution:
-        print(currentTime)
         
+        print(currentTime, currentEvent._info[0])
+
         if currentEvent.getKind() == "mut":
+            
             individuo = populacao.getIndividuo(currentEvent.getTarget())
-            newValoracao = individuo.getValoracao()
+            newValoracao = individuo.getValoracao().copy()
             for i in range(N):
                 if not individuo.isLocked(i) and random() < individuo.getPrMut():
                     newValoracao.flip(i)
@@ -67,12 +68,15 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
         elif currentEvent.getKind() == "melh":
 
             individuo = populacao.getIndividuo(currentEvent.getTarget())
-            newValoracao = individuo.getValoracao()
+            
+            newValoracao = individuo.getValoracao().copy()
+            
             for i in numpy.random.permutation(N):
                 if not individuo.isLocked(i):
-                    newValoracao.flip(i)
-                    if formula.evaluate(newValoracao) < individuo.getEval():
-                        newValoracao.flip(i)
+                    compValoracao = newValoracao.copy()
+                    compValoracao.flip(i)
+                    if formula.evaluate(compValoracao) >= formula.evaluate(newValoracao):
+                        newValoracao = compValoracao
             newEval = formula.evaluate(newValoracao)
             individuo.memorize(individuo.getValoracao())
             individuo.setValoracao(newValoracao)
@@ -106,13 +110,16 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
                         individuo.setPrMut(individuo.getActvCount() / (2 * N))
 
             agenda.add(Evento("reg", currentTime + expRandom(TReg), None))
-
+        
+        print(individuo.getId(), individuo.getEval())
+        
         agenda.remove()
         currentEvent = agenda.next()
         currentTime = currentEvent.getTime()
+        
 
     if foundSolution != None:
-        return (1, foundSolution)
+        return (1, foundSolution.display())
     else:
         maxEval = 0
         bestVal = None
@@ -120,6 +127,10 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
             if individuo.getEval() > maxEval:
                 maxEval = individuo.getEval()
                 bestVal = individuo.getValoracao()
-        return (maxEval / C, bestVal)
+        return (maxEval / C, bestVal.display())
 
-print(simulador(100, 10, 10, 10, 10, "uf250-01.cnf"))
+print(simulador(100, 1000, 10, 10, 3, "ProblemSet/uf20-91/uf20-01.cnf"))
+
+
+#for i in range(1,100):
+    #print(simulador(100, 10, 5, 10, 10, f"ProblemSet/uf50-218/uf50-0{i}.cnf"))

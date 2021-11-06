@@ -1,13 +1,11 @@
-import math
-
-
 class Bitset:
     
-    def __init__(self):
+    def __init__(self, size):
         self._data = 0
+        self._size = size
 
-    def asInt(self):
-        return self._data
+    def getSize(self):
+        return self._size
 
     def set(self, i):
         self._data |= 1 << i
