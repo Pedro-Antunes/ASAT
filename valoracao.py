@@ -1,4 +1,4 @@
-from bitset_alt import Bitset
+from bitset import Bitset
 
 
 class Valoracao(Bitset):
@@ -14,8 +14,3 @@ class Valoracao(Bitset):
             else:
                 s += "0"
         return s
-
-    def copy(self):
-        b = Valoracao(self.getSize())
-        b._data = self._data
-        return b

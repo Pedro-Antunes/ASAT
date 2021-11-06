@@ -3,6 +3,8 @@ from random import random
 
 import numpy
 
+import copy
+
 from cap import CAP
 from evento_alt import Evento
 from formula import Formula
@@ -51,7 +53,7 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
         if currentEvent.getKind() == "mut":
             
             individuo = populacao.getIndividuo(currentEvent.getTarget())
-            newValoracao = individuo.getValoracao().copy()
+            newValoracao = copy.deepcopy(individuo.getValoracao())
             for i in range(N):
                 if not individuo.isLocked(i) and random() < individuo.getPrMut():
                     newValoracao.flip(i)
@@ -69,14 +71,14 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
 
             individuo = populacao.getIndividuo(currentEvent.getTarget())
             
-            newValoracao = individuo.getValoracao().copy()
+            newValoracao = copy.deepcopy(individuo.getValoracao())
             
             for i in numpy.random.permutation(N):
                 if not individuo.isLocked(i):
-                    compValoracao = newValoracao.copy()
+                    compValoracao = copy.deepcopy(newValoracao)
                     compValoracao.flip(i)
                     if formula.evaluate(compValoracao) >= formula.evaluate(newValoracao):
-                        newValoracao = compValoracao
+                        newValoracao = copy.deepcopy(compValoracao)
             newEval = formula.evaluate(newValoracao)
             individuo.memorize(individuo.getValoracao())
             individuo.setValoracao(newValoracao)
@@ -93,7 +95,7 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
                     if individuo.uniqueValCount() < 3:
                         # Rever isto <--
                         colonizer = populacao.getRandomOther(individuo.getId())
-                        newValoracao = colonizer.getValoracao()
+                        newValoracao = copy.deepcopy(colonizer.getValoracao())
                         for i in numpy.random.permutation(N):
                             newValoracao.flip(i)
                             if formula.evaluate(newValoracao) < colonizer.getEval():
@@ -129,8 +131,8 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
                 bestVal = individuo.getValoracao()
         return (maxEval / C, bestVal.display())
 
-print(simulador(100, 1000, 10, 10, 3, "ProblemSet/uf20-91/uf20-01.cnf"))
+print(simulador(100, 10, 10, 10, 2, "ProblemSet/uf50-218/uf50-01.cnf"))
 
 
-#for i in range(1,100):
-    #print(simulador(100, 10, 5, 10, 10, f"ProblemSet/uf50-218/uf50-0{i}.cnf"))
+#for i in range(1,2):
+    #print(simulador(100, 10, 10, 10, 10, f"ProblemSet/uf50-218/uf50-0{i}.cnf"))
