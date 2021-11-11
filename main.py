@@ -1,3 +1,4 @@
+import time
 from math import log
 from random import random
 
@@ -7,7 +8,7 @@ import copy
 
 from cap import CAP
 from evento_alt import Evento
-from formula import Formula
+from formula_alt import Formula
 from individuo import Individuo
 from populacao import Populacao
 from valoracao import Valoracao
@@ -24,12 +25,12 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
     C = formula.getClauseCount()
     
     populacao = Populacao()
-    for _ in range(In):
+    for id in range(In):
         firstValoracao = Valoracao(N)
         for i in range(N):
             if random() < 0.5:
                 firstValoracao.flip(i)
-        populacao.create(firstValoracao)
+        populacao.add(Individuo(id, firstValoracao))
     
     for individuo in populacao.getAll():
         individuo.setEval(formula.evaluate(individuo.getValoracao()))
@@ -48,7 +49,7 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
     
     while currentTime < TFim and not foundSolution:
         
-        print(currentTime, currentEvent._info[0])
+        #print(currentTime, currentEvent._info[0])
 
         if currentEvent.getKind() == "mut":
             
@@ -103,7 +104,7 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
                         id = individuo.getId()
                         newIndividuo = Individuo(id, newValoracao)
                         newIndividuo.setEval(formula.evaluate(newValoracao))
-                        populacao.colonize(id, newIndividuo)
+                        populacao.replace(id, newIndividuo)
                         if newIndividuo.getEval() == C:
                             foundSolution = newValoracao
                     else:
@@ -113,7 +114,7 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
 
             agenda.add(Evento("reg", currentTime + expRandom(TReg), None))
         
-        print(individuo.getId(), individuo.getEval())
+        #print(individuo.getId(), individuo.getEval())
         
         agenda.remove()
         currentEvent = agenda.next()
@@ -131,8 +132,7 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
                 bestVal = individuo.getValoracao()
         return (maxEval / C, bestVal.display())
 
-print(simulador(100, 10, 10, 10, 2, "ProblemSet/uf50-218/uf50-01.cnf"))
+print(simulador(100, 1, 1, 1, 4, "ProblemSet/CBS_k3_n100_m403_b10/CBS_k3_n100_m403_b10_1.cnf"))
 
-
-#for i in range(1,2):
-    #print(simulador(100, 10, 10, 10, 10, f"ProblemSet/uf50-218/uf50-0{i}.cnf"))
+#for i in range(1,1001):
+#    print(i, simulador(100, 10, 10, 10, 10, f"ProblemSet/uf20-91/uf20-0{i}.cnf"))

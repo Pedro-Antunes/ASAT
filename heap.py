@@ -8,7 +8,6 @@ class Heap:
     def push(self, object):
         self._tree.append(object)
         self.siftUp(len(self._tree) - 1)
-        return
 
     def pop(self):
         top = self._tree[1]

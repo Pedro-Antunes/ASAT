@@ -1,17 +1,18 @@
 import random
 
-from individuo import Individuo
-
 
 class Populacao:
 
     def __init__(self):
         self._elem = []
 
-    def create(self, val):
-        self._elem.append(Individuo(len(self._elem), val))
+    def add(self, individuo):
+        self._elem.append(individuo.getId(), individuo)
+        # Fazer binary search para encontrar k
+        self._elem.insert(k, individuo)
 
-    def colonize(self, id, individuo):
+    def replace(self, id, individuo):
+        # Pesquisa binária para encontrar individuo
         self._elem[id] = individuo
         
     def getIndividuo(self, id):
@@ -20,7 +21,7 @@ class Populacao:
     def getAll(self):
         return self._elem
 
-    #Verificar bounds do range
+    #Verificar bounds do range e meter no main
     def getRandomOther(self, id):
         r = random.randint(0, len(self._elem)-2)
         if r >= id:

@@ -1,4 +1,5 @@
 from valoracao import Valoracao
+from bitset import Bitset
 
 
 class Individuo:
@@ -8,7 +9,7 @@ class Individuo:
         self._val = val
         self._eval = None
         self._mem = []
-        self._actv = Valoracao(val.getSize())
+        self._actv = Bitset(val.getSize())
         self._PrMut = 0.5
 
     def getId(self):
@@ -25,9 +26,6 @@ class Individuo:
 
     def getEval(self):
         return self._eval
-
-    def getActvCount(self):
-        return self._actv.count()
 
     def memorize(self, x):
         self._mem.append(x)
