@@ -4,8 +4,8 @@ from random import random
 import numpy
 import copy
 
-from cap_alt import CAP
-from evento_alt import Evento
+from cap import CAP
+from evento import Evento
 from formula_alt import Formula
 from individuo_alt import Individuo
 from populacao_alt import Populacao
@@ -138,7 +138,7 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
                 bestVal = individuo.getValoracao()
         return (maxEval / C, bestVal.display())
 
-print(simulador(100, 5, 5, 5, 10, "ProblemSet/uf50-218/uf50-01.cnf"))
+print(simulador(100, 5, 5, 5, 10, "ProblemSet/uf250-1065/uf250-01.cnf"))
 
 #for i in range(1,1001):
 #    print(i, simulador(100, 10, 10, 10, 10, f"ProblemSet/uf20-91/uf20-0{i}.cnf"))

@@ -1,16 +1,21 @@
-from heap import Heap
-
-
 class CAP:
 
     def __init__(self):
-        self._eventHeap = Heap(lambda evt1, evt2: evt1.getTime() > evt2.getTime())
+        self._eventList = []
 
-    def add(self, evt):
-        self._eventHeap.push(evt)
+    def add(self, evento):
+        left = 0
+        right = len(self._eventList)
+        while left < right:
+            mid = (left + right) // 2
+            if evento.getTime() > self._eventList[mid].getTime():
+                right = mid
+            else:
+                left = mid + 1
+        self._eventList.insert(left, evento)
 
     def next(self):
-        return self._eventHeap.top()
+        return self._eventList[-1]
 
     def remove(self):
-        self._eventHeap.pop()
+        self._eventList.pop()
