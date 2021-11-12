@@ -9,8 +9,8 @@ class Populacao:
     def add(self, individuo):
         self._elem.update({individuo.getId() : individuo})
 
-    def replace(self, id, individuo):
-        self._elem.update({id : individuo})
+    def replace(self, individuo):
+        self._elem.update({individuo.getId() : individuo})
         
     def getIndividuo(self, id):
         return self._elem.get(id)

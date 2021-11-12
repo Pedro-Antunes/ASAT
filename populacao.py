@@ -10,23 +10,23 @@ class Populacao:
         k = self._locate(individuo.getId())
         self._elem.insert(k, individuo)
 
-    def replace(self, id, individuo):
-        k = self._locate(id)
+    def replace(self, individuo):
+        k = self._locate(individuo.getId())
         self._elem[k] = individuo
         
-    def getIndividuo(self, id):
-        return self._elem[id]
+    def getIndividuo(self, idt):
+        return self._elem[idt]
 
     def getAll(self):
         return self._elem
 
-    def getRandomOther(self, id):
+    def getRandomOther(self, idt):
         r = random.randint(0, len(self._elem)-2)
-        if r >= id:
+        if r >= idt:
             r += 1
         return self._elem[r]
 
-    def _locate(self, id):
+    def _locate(self, idt):
         left = 0
         right = len(self._elem)
         while left < right:

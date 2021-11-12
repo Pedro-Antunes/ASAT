@@ -1,26 +1,23 @@
 class Bitset:
     
     def __init__(self, size):
-        self._data = [0]*size
+        self._data = [False]*size
         self._size = size
 
     def getSize(self):
         return self._size
 
     def set(self, i):
-        self._data[i] = 1
+        self._data[i] = True
         
     def reset(self, i):
-        self._data[i] = 0
+        self._data[i] = False
             
     def flip(self, i):
-        if self._data[i] == 0:
-            self._data[i] = 1
-        else:
-            self._data[i] = 0
+        self._data[i] = not self._data[i]
         
     def test(self, i):
-        return bool(self._data[i])
+        return self._data[i]
 
     def count(self):
         c = 0
@@ -28,4 +25,3 @@ class Bitset:
             if self.test(i):
                 c += 1
         return c
-    
