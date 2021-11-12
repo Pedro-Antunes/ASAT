@@ -1,16 +1,15 @@
-# DONE
 class Formula:
 
     def __init__(self, path):
         self._varCount = 0
-        self._size = 0
+        self._clauseCount = 0
         self._clauses = []
         for line in open(path, "r"):
             if not line.startswith("c") and len(line) > 2:
                 args = line.split()
                 if args[0] == "p":
                     self._varCount = int(args[2])
-                    self._size = int(args[3])
+                    self._clauseCount = int(args[3])
                 else:
                     lineVars = []
                     for literal in args:
@@ -22,7 +21,7 @@ class Formula:
         return self._varCount
 
     def getClauseCount(self):
-        return len(self._clauses)
+        return self._clauseCount
 
     def evaluate(self, valoracao):
         satisfy = 0
@@ -33,4 +32,3 @@ class Formula:
             if i < len(cl):
                 satisfy += 1
         return satisfy
-
