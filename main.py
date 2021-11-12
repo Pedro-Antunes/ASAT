@@ -1,18 +1,15 @@
-import time
 from math import log
 from random import random
 
 import numpy
-
 import copy
 
-from cap import CAP
+from cap_alt import CAP
 from evento_alt import Evento
 from formula_alt import Formula
-from individuo import Individuo
-from populacao import Populacao
+from individuo_alt import Individuo
+from populacao_alt import Populacao
 from valoracao import Valoracao
-
 
 def expRandom(m):
     return -m*log(random())
@@ -38,7 +35,7 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
     agenda = CAP()
     for individuo in populacao.getAll():
         agenda.add(Evento("mut", expRandom(TMut), individuo.getId()))
-        agenda.add(Evento("melh", expRandom(TMelh), individuo.getId()))
+        agenda.add(Evento("melh", 0, individuo.getId()))
     agenda.add(Evento("reg", expRandom(TReg), None))
 
     currentEvent = agenda.next()
@@ -94,19 +91,28 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
             for individuo in populacao.getAll():
                 if individuo.valCount() >= 10:
                     if individuo.uniqueValCount() < 3:
-                        # Rever isto <--
-                        colonizer = populacao.getRandomOther(individuo.getId())
-                        newValoracao = copy.deepcopy(colonizer.getValoracao())
-                        for i in numpy.random.permutation(N):
-                            newValoracao.flip(i)
-                            if formula.evaluate(newValoracao) < colonizer.getEval():
+                        if In == 1:
+                            newValoracao = Valoracao(N)
+                            for i in range(N):
+                                    if random() < 0.5:
+                                        newValoracao.flip(i)
+                        else:
+                            colonizer = populacao.getRandomOther(individuo.getId())
+                            if colonizer.valCount() == 0:
+                                newValoracao = copy.deepcopy(colonizer.getValoracao())
+                            else:
+                                newValoracao = copy.deepcopy(colonizer.getRandomMemVal())
+                            for i in numpy.random.permutation(N):
                                 newValoracao.flip(i)
-                        id = individuo.getId()
-                        newIndividuo = Individuo(id, newValoracao)
-                        newIndividuo.setEval(formula.evaluate(newValoracao))
-                        populacao.replace(id, newIndividuo)
-                        if newIndividuo.getEval() == C:
-                            foundSolution = newValoracao
+                                if formula.evaluate(newValoracao) < colonizer.getEval():
+                                    newValoracao.flip(i)
+                            id = individuo.getId()
+                            newIndividuo = Individuo(id, newValoracao)
+                            newIndividuo.setEval(formula.evaluate(newValoracao))
+                            populacao.replace(id, newIndividuo)
+                            if newIndividuo.getEval() == C:
+                                foundSolution = newValoracao
+
                     else:
                         individuo.lockBits(N)
                         individuo.forget()
@@ -132,7 +138,7 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
                 bestVal = individuo.getValoracao()
         return (maxEval / C, bestVal.display())
 
-print(simulador(100, 1, 1, 1, 4, "ProblemSet/CBS_k3_n100_m403_b10/CBS_k3_n100_m403_b10_1.cnf"))
+print(simulador(100, 5, 5, 5, 10, "ProblemSet/uf50-218/uf50-01.cnf"))
 
 #for i in range(1,1001):
 #    print(i, simulador(100, 10, 10, 10, 10, f"ProblemSet/uf20-91/uf20-0{i}.cnf"))
