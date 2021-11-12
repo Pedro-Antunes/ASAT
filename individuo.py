@@ -1,12 +1,11 @@
-from valoracao import Valoracao
 from bitset import Bitset
 
 
 class Individuo:
 
-    def __init__(self, id, val):
-        self._id = id
-        self._val = val
+    def __init__(self, idt, valoracao):
+        self._id = idt
+        self._val = valoracao
         self._eval = None
         self._mem = []
         self._actv = Bitset(val.getSize())
@@ -18,17 +17,17 @@ class Individuo:
     def getValoracao(self):
         return self._val
 
-    def setValoracao(self, val):
-        self._val = val
+    def setValoracao(self, valoracao):
+        self._val = valoracao
+    
+    def getEval(self):
+        return self._eval
 
     def setEval(self, eval):
         self._eval = eval
 
-    def getEval(self):
-        return self._eval
-
-    def memorize(self, x):
-        self._mem.append(x)
+    def memorize(self, valoracao):
+        self._mem.append(valoracao)
 
     def forget(self):
         self._mem = []
@@ -52,11 +51,8 @@ class Individuo:
     def isLocked(self, pos):
         return self._actv.test(pos)
 
-    def getActvCount(self):
-        return self._actv.count()
-
-    def lockBits(self, N):
-        for i in range(N):
+    def lockBits(self):
+        for i in range(self._val.getSize()):
             if not self._actv.test(i):
                 j = 1
                 state = self._mem[0].test(i)
@@ -64,6 +60,9 @@ class Individuo:
                     j += 1
                 if j >= len(self._mem):
                     self._actv.set(i)
+
+    def getActvCount(self):
+        return self._actv.count()
 
     def getPrMut(self):
         return self._PrMut

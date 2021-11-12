@@ -114,7 +114,7 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
                                 foundSolution = newValoracao
 
                     else:
-                        individuo.lockBits(N)
+                        individuo.lockBits()
                         individuo.forget()
                         individuo.setPrMut(individuo.getActvCount() / (2 * N))
 
@@ -138,4 +138,5 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
     
     return (maxEval / C, bestVal.display())
 
-print(simulador(100, 5, 5, 5, 10, "ProblemSet/uf50-218/uf50-01.cnf"))
+
+print(simulador(100, 5, 3, 3, 10, "ProblemSet/uf50-218/uf50-01.cnf"))

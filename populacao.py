@@ -10,8 +10,8 @@ class Populacao:
         k = self._locate(individuo.getId())
         self._elem.insert(k, individuo)
 
-    def replace(self, individuo):
-        k = self._locate(individuo.getId())
+    def replace(self, idt, individuo):
+        k = self._locate(idt)
         self._elem[k] = individuo
         
     def getIndividuo(self, idt):
