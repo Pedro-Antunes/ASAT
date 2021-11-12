@@ -1,6 +1,3 @@
-from evento import Evento
-
-
 class CAP:
 
     def __init__(self):
