@@ -8,7 +8,7 @@ from cap import CAP
 from evento import Evento
 from formula_alt import Formula
 from individuo_alt import Individuo
-from populacao_alt import Populacao
+from populacao import Populacao
 from valoracao import Valoracao
 
 def expRandom(m):

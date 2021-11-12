@@ -31,7 +31,7 @@ class Populacao:
         right = len(self._elem)
         while left < right:
             mid = (left + right) // 2
-            if  id > self._elem[mid].getId():
+            if  idt > self._elem[mid].getId():
                 left = mid + 1
             else:
                 right = mid
