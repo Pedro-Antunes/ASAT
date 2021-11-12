@@ -49,8 +49,8 @@ class Individuo:
                 uniqueValList.append(val)
         return len(uniqueValList)
 
-    def isLocked(self, bit):
-        return self._actv.test(bit)
+    def isLocked(self, pos):
+        return self._actv.test(pos)
 
     def getActvCount(self):
         return self._actv.count()

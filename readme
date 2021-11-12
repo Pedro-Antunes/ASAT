@@ -48,13 +48,4 @@ Simulador
 
 Comentários
 
- - O Evento é um terno (label, due, target) e podemos passar o próprio indivíduo como parâmetro target=Individuo() - é melhor não.
- - Usar N_<lorem> para número de elementos (ie. N_var para número de variáveis).
- - Não percebo a utilizade do identificador dos indivíduos. Assim, não podemos iterar a populacao por index e vamos ter que procurar cada indivíduo um a um - O(N).
- ^ O identificar de um indivíduo NÃO é a sua posição na população.
- - Definir um método do bitset que conte o número de bits ativos.
- - **Talvez** vale a pena implementar binary search na população - Nope.
- - Refazer as classes, não aceder aos atributos diretamente, usar métodos
- - Notação: _<atributo> para nomes de atributos
-
 Critica à qualidade do código: i.e. lista de bits ativos, minimo local

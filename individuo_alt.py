@@ -47,8 +47,8 @@ class Individuo:
     def uniqueValCount(self):
         return len(self._mem)
 
-    def isLocked(self, bit):
-        return self._actv.test(bit)
+    def isLocked(self, pos):
+        return self._actv.test(pos)
 
     def getActvCount(self):
         return self._actv.count()
