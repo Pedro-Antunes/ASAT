@@ -1,6 +1,3 @@
-from heap import Heap
-
-
 class CAP:
 
     def __init__(self):
