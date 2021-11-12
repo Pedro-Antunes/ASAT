@@ -37,10 +37,17 @@ class Individuo:
         return len(self._mem)
 
     def uniqueValCount(self):
-        valSet = set()
+        uniqueValList = []
         for val in self._mem:
-            valSet.add(val.display())
-        return len(valSet)
+            found = False
+            i = 0
+            while not found and i < len(uniqueValList):
+                if val.compare(uniqueValList[i]):
+                    found = True
+                i += 1
+            if not found:
+                uniqueValList.append(val)
+        return len(uniqueValList)
 
     def isLocked(self, bit):
         return self._actv.test(bit)
