@@ -1,6 +1,5 @@
 from math import log
 from random import random
-
 import numpy
 import copy
 
@@ -75,14 +74,16 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
 
             individuo = populacao.getIndividuo(currentEvent.getTarget())
             newValoracao = copy.deepcopy(individuo.getValoracao())
+            newEval = individuo.getEval()
             
             for i in numpy.random.permutation(N):
                 if not individuo.isLocked(i):
                     compValoracao = copy.deepcopy(newValoracao)
                     compValoracao.flip(i)
-                    if formula.evaluate(compValoracao) >= formula.evaluate(newValoracao):
+                    compEval = formula.evaluate(compValoracao)
+                    if compEval >= newEval:
                         newValoracao = compValoracao
-            newEval = formula.evaluate(newValoracao)
+                        newEval = compEval
             individuo.memorize(individuo.getValoracao())
             individuo.setValoracao(newValoracao)
             individuo.setEval(newEval)
@@ -97,6 +98,7 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
 
             for individuo in populacao.getAll():
                 if individuo.valCount() >= 10:
+
                     if individuo.uniqueValCount() < 3:
                         if In == 1:
                             newValoracao = Valoracao(N)
@@ -109,17 +111,22 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
                                 newValoracao = copy.deepcopy(colonizer.getValoracao())
                             else:
                                 newValoracao = copy.deepcopy(colonizer.getRandomMemVal())
-                            for i in numpy.random.permutation(N):
-                                newValoracao.flip(i)
-                                if formula.evaluate(newValoracao) < colonizer.getEval():
-                                    newValoracao.flip(i)
-                            idt = individuo.getId()
-                            newIndividuo = Individuo(idt, newValoracao)
-                            newIndividuo.setEval(formula.evaluate(newValoracao))
-                            populacao.replace(idt, newIndividuo)
-                            if newIndividuo.getEval() == C:
-                                foundSolution = True
-                                solution = newValoracao
+
+                        newEval = formula.evaluate(newValoracao)
+                        for i in numpy.random.permutation(N):
+                            compValoracao = copy.deepcopy(newValoracao)
+                            compValoracao.flip(i)
+                            compEval = formula.evaluate(compValoracao)
+                            if compEval >= newEval:
+                                newValoracao = compValoracao
+                                newEval = compEval
+                        idt = individuo.getId()
+                        newIndividuo = Individuo(idt, newValoracao)
+                        newIndividuo.setEval(newEval)
+                        populacao.replace(idt, newIndividuo)
+                        if newEval == C:
+                            foundSolution = True
+                            solution = newValoracao
 
                     else:
                         individuo.lockBits()
