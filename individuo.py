@@ -1,3 +1,4 @@
+import random
 from bitset import Bitset
 
 
@@ -62,7 +63,7 @@ class Individuo:
                 while j < len(self._mem) and self._mem[j].test(i) == state:
                     j += 1
                 if j >= len(self._mem):
-                    self._actv.set(i)
+                    self._actv.st(i)
 
     def getActvCount(self):
         return self._actv.count()
