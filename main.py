@@ -137,7 +137,7 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
         maxEval = C
         bestVal = solution
     else:
-        maxEval = 0
+        maxEval = -1
         bestVal = solution
         for individuo in populacao.getAll():
             if individuo.getEval() > maxEval:
