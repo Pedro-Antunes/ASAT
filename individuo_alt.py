@@ -31,6 +31,9 @@ class Individuo:
     def memorize(self, valoracao):
         self._info.get("mem").append(valoracao)
 
+    def getRandomMemVal(self):
+        return random.choice(self._info.get("mem"))
+
     def forget(self):
         self._info.get("mem").clear()
 
