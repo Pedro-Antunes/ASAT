@@ -78,12 +78,12 @@ def simulador(TFim, TMut, TMelh, TReg, In, path):
             
             for i in numpy.random.permutation(N):
                 if not individuo.isLocked(i):
-                    compValoracao = copy.deepcopy(newValoracao)
-                    compValoracao.flip(i)
-                    compEval = formula.evaluate(compValoracao)
+                    newValoracao.flip(i)
+                    compEval = formula.evaluate(newValoracao)
                     if compEval >= newEval:
-                        newValoracao = compValoracao
                         newEval = compEval
+                    else:
+                        newValoracao.flip(i)
             individuo.memorize(individuo.getValoracao())
             individuo.setValoracao(newValoracao)
             individuo.setEval(newEval)
@@ -114,12 +114,12 @@ def simulador(TFim, TMut, TMelh, TReg, In, path):
 
                         newEval = formula.evaluate(newValoracao)
                         for i in numpy.random.permutation(N):
-                            compValoracao = copy.deepcopy(newValoracao)
-                            compValoracao.flip(i)
-                            compEval = formula.evaluate(compValoracao)
+                            newValoracao.flip(i)
+                            compEval = formula.evaluate(newValoracao)
                             if compEval >= newEval:
-                                newValoracao = compValoracao
                                 newEval = compEval
+                            else:
+                                newValoracao.flip(i)
                         idt = individuo.getId()
                         newIndividuo = Individuo(idt, newValoracao)
                         newIndividuo.setEval(newEval)
@@ -154,4 +154,4 @@ def simulador(TFim, TMut, TMelh, TReg, In, path):
     return (maxEval / C, bestVal.display())
 
 
-#print(simulador(100, 5, 5, 5, 10, "ProblemSet/uf250-1065/uf250-01.cnf"))
+print(simulador(100, 5, 5, 5, 10, "ProblemSet/uf250-1065/uf250-01.cnf"))
