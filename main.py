@@ -139,4 +139,4 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
     return (maxEval / C, bestVal.display())
 
 
-print(simulador(100, 5, 3, 3, 10, "ProblemSet/uf50-218/uf50-01.cnf"))
+print(simulador(100, 5, 5, 5, 10, "ProblemSet/uf250-1065/uf250-01.cnf"))

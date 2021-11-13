@@ -8,7 +8,7 @@ class Individuo:
         self._val = valoracao
         self._eval = None
         self._mem = []
-        self._actv = Bitset(val.getSize())
+        self._actv = Bitset(valoracao.getSize())
         self._PrMut = 0.5
 
     def getId(self):
@@ -30,7 +30,7 @@ class Individuo:
         self._mem.append(valoracao)
 
     def forget(self):
-        self._mem = []
+        self._mem.clear()
 
     def valCount(self):
         return len(self._mem)
@@ -52,7 +52,7 @@ class Individuo:
         return self._actv.test(pos)
 
     def lockBits(self):
-        for i in range(self._val.getSize()):
+        for i in range(self._actv.getSize()):
             if not self._actv.test(i):
                 j = 1
                 state = self._mem[0].test(i)
