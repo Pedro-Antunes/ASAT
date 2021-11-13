@@ -14,7 +14,7 @@ def expRandom(m):
     return -m*log(random())
 
 
-def simulador(TFim, Tmut, TMelh, TReg, In, path):
+def simulador(TFim, TMut, TMelh, TReg, In, path):
     
     formula = Formula(path)
     N = formula.getVarCount()

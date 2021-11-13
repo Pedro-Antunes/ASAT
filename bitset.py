@@ -7,7 +7,7 @@ class Bitset:
     def getSize(self):
         return self._size
 
-    def set(self, i):
+    def st(self, i):
         self._data[i] = True
         
     def reset(self, i):
