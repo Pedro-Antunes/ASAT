@@ -20,6 +20,9 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
     formula = Formula(path)
     N = formula.getVarCount()
     C = formula.getClauseCount()
+
+    foundSolution = False
+    solution = None
     
     populacao = Populacao()
     for idt in range(In):
@@ -31,6 +34,9 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
     
     for individuo in populacao.getAll():
         individuo.setEval(formula.evaluate(individuo.getValoracao()))
+        if individuo.getEval() == C:
+            foundSolution = True
+            solution = individuo.getValoracao()
 
     agenda = CAP()
     for individuo in populacao.getAll():
@@ -40,9 +46,6 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
 
     currentEvent = agenda.next()
     currentTime = currentEvent.getTime()
-
-    foundSolution = False
-    solution = None
 
     while currentTime < TFim and not foundSolution:
 
