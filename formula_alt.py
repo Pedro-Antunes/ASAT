@@ -27,13 +27,13 @@ class Formula:
         return self._clauseCount
 
     def evaluate(self, valoracao):
-        orColumns = 1 << self._clauseCount
+        orColumns = 1 << self._clauseCount  # Garante que tem o mesmo tamanho não sendo este bit usado
         for i in range(self._varCount):
             orColumns |= self._columns[i][valoracao.test(i)]
         satisfy = self._clauseCount
-        while orColumns & (orColumns + 1):
+        while orColumns & (orColumns + 1):  # Só é falso quando orColumns = 111... base 2
             satisfy -= 1
-            orColumns |= orColumns + 1
+            orColumns |= orColumns + 1  # Ativa o bit inativado menos significativo
         return satisfy
 
     def show(self):

@@ -19,7 +19,8 @@ class Populacao:
         return list(self._elem.values())
 
     def getRandomOther(self, idt):
-        r = random.randint(0, len(self._elem)-2)
-        if r >= idt:
-            r += 1
-        return self._elem.get(r)
+        # Retira o individuo do dicionário, escolhe um elemento aleatório e adiciona-o de volta
+        ind = self._elem.pop(idt)
+        r = random.choice(self.getAll)
+        self.add(ind)
+        return r

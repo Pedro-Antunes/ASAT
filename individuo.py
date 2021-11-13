@@ -40,14 +40,16 @@ class Individuo:
         return len(self._mem)
 
     def uniqueValCount(self):
-        uniqueValList = []
+        uniqueValList = []  # Lista de valorações distintas
         for val in self._mem:
             found = False
             i = 0
+            # Verifica se val é equivalente a alguma valoração de uniqueValList
             while not found and i < len(uniqueValList):
                 if val.compare(uniqueValList[i]):
                     found = True
                 i += 1
+            # Adiciona esta valoração a uniqueValList se não encontrar equivalente
             if not found:
                 uniqueValList.append(val)
         return len(uniqueValList)
@@ -56,12 +58,15 @@ class Individuo:
         return self._actv.test(pos)
 
     def lockBits(self):
+        # Percorre todos os bits não ativos de Actv
         for i in range(self._actv.getSize()):
             if not self._actv.test(i):
                 j = 1
                 state = self._mem[0].test(i)
+                # Verifica se os bits das valorações da memória nessa posição são todos iguais
                 while j < len(self._mem) and self._mem[j].test(i) == state:
                     j += 1
+                # Ativa o bit de Actv se forem todos iguais
                 if j >= len(self._mem):
                     self._actv.st(i)
 
