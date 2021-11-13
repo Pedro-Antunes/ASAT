@@ -75,7 +75,7 @@ def simulador(TFim, TMut, TMelh, TReg, In, path):
             individuo = populacao.getIndividuo(currentEvent.getTarget())
             newValoracao = copy.deepcopy(individuo.getValoracao())
             newEval = individuo.getEval()
-            
+
             for i in numpy.random.permutation(N):
                 if not individuo.isLocked(i):
                     newValoracao.flip(i)
@@ -145,7 +145,7 @@ def simulador(TFim, TMut, TMelh, TReg, In, path):
         bestVal = solution
     else:
         maxEval = -1
-        bestVal = solution
+        bestVal = None
         for individuo in populacao.getAll():
             if individuo.getEval() > maxEval:
                 maxEval = individuo.getEval()
