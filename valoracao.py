@@ -3,9 +3,6 @@ from bitset import Bitset
 
 class Valoracao(Bitset):
 
-    def __init__(self, N):
-        super().__init__(N)
-
     def compare(self, val):
         if self.getSize() == val.getSize():
             isEqual = False
