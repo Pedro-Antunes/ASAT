@@ -7,7 +7,7 @@ import copy
 from cap import CAP
 from evento import Evento
 from formula_alt import Formula
-from individuo_alt import Individuo
+from individuo import Individuo
 from populacao import Populacao
 from valoracao import Valoracao
 
@@ -41,8 +41,9 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
     currentEvent = agenda.next()
     currentTime = currentEvent.getTime()
 
-    foundSolution = None
-    
+    foundSolution = False
+    solution = None
+
     while currentTime < TFim and not foundSolution:
 
 
@@ -50,16 +51,19 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
             
             individuo = populacao.getIndividuo(currentEvent.getTarget())
             newValoracao = copy.deepcopy(individuo.getValoracao())
+            
             for i in range(N):
                 if not individuo.isLocked(i) and random() < individuo.getPrMut():
                     newValoracao.flip(i)
             newEval = formula.evaluate(newValoracao)
+
             if newEval >= individuo.getEval():
                 individuo.memorize(individuo.getValoracao())
                 individuo.setValoracao(newValoracao)
                 individuo.setEval(newEval)
                 if newEval == C:
-                    foundSolution = newValoracao
+                    foundSolution = True
+                    solution = newValoracao
 
             agenda.add(Evento("mut", currentTime + expRandom(TMut), individuo.getId()))
         
@@ -67,7 +71,6 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
         elif currentEvent.getKind() == "melh":
 
             individuo = populacao.getIndividuo(currentEvent.getTarget())
-            
             newValoracao = copy.deepcopy(individuo.getValoracao())
             
             for i in numpy.random.permutation(N):
@@ -75,13 +78,14 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
                     compValoracao = copy.deepcopy(newValoracao)
                     compValoracao.flip(i)
                     if formula.evaluate(compValoracao) >= formula.evaluate(newValoracao):
-                        newValoracao = copy.deepcopy(compValoracao)
+                        newValoracao = compValoracao
             newEval = formula.evaluate(newValoracao)
             individuo.memorize(individuo.getValoracao())
             individuo.setValoracao(newValoracao)
             individuo.setEval(newEval)
             if newEval == C:
-                foundSolution = newValoracao
+                foundSolution = True
+                solution = newValoracao
 
             agenda.add(Evento("melh", currentTime + expRandom(TMelh), individuo.getId()))
         
@@ -94,8 +98,8 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
                         if In == 1:
                             newValoracao = Valoracao(N)
                             for i in range(N):
-                                    if random() < 0.5:
-                                        newValoracao.flip(i)
+                                if random() < 0.5:
+                                    newValoracao.flip(i)
                         else:
                             colonizer = populacao.getRandomOther(individuo.getId())
                             if colonizer.valCount() == 0:
@@ -111,7 +115,8 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
                             newIndividuo.setEval(formula.evaluate(newValoracao))
                             populacao.replace(idt, newIndividuo)
                             if newIndividuo.getEval() == C:
-                                foundSolution = newValoracao
+                                foundSolution = True
+                                solution = newValoracao
 
                     else:
                         individuo.lockBits()
@@ -125,12 +130,12 @@ def simulador(TFim, TReg, TMelh, TMut, In, path):
         currentEvent = agenda.next()
         currentTime = currentEvent.getTime()
         
-    if foundSolution != None:
+    if foundSolution:
         maxEval = C
-        bestVal = foundSolution
+        bestVal = solution
     else:
         maxEval = 0
-        bestVal = None
+        bestVal = solution
         for individuo in populacao.getAll():
             if individuo.getEval() > maxEval:
                 maxEval = individuo.getEval()
