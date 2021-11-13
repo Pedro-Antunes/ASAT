@@ -3,12 +3,12 @@ from bitset import Bitset
 
 class Valoracao(Bitset):
 
-    def compare(self, val):
-        if self.getSize() == val.getSize():
+    def compare(self, valoracao):
+        if self.getSize() != valoracao.getSize():
             isEqual = False
         else:
             i = 0
-            while self.test(i) == val.test(i) and i < self.getSize():
+            while i < self.getSize() and self.test(i) == valoracao.test(i):
                 i += 1
             if i != self.getSize():
                 isEqual = False
